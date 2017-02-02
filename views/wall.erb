@@ -1,0 +1,239 @@
+<link href="https://fonts.googleapis.com/css?family=Barrio" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" rel="stylesheet"> 
+ <body>
+	<div class="body_whole">
+		<% if user==nil %>
+		<a href="/login">login first</a>
+		<%end%>
+
+		<div>
+			<h1 style="text-align: center; color: #ffffff; font-family: 'Barrio', cursive; " >
+				logged in as <%=user.username%> 
+			</h1>
+
+			<h1 style="color:#ffffff;font-family:'Gloria Hallelujah',cursive;position:absolute;top:0px;left:20px; " >
+				SOCIAL NETWORK 
+			</h1>
+
+			<form action="/logout" method="GET" style="position:absolute; top:20px; right:20px;">
+				<input type="submit" style="background-color: #90caf9;"  name="submit" value="LOGOUT">
+			</form>
+			<form action="/show_friends" method="POST" style="position:absolute; top:50px; right:20px;">
+				<input type="submit" style="background-color: #90caf9;"  name="submit" value="Show Friends">
+			</form>
+			<hr>
+			<br>
+			<div style="text-align: center;">
+				<div style="text-align: center;color: #ffffff;" class="upper_options" >
+					<h4 style="text-align: center;">FIND A FRIEND</h4>
+					<form action="/find_friend" method="POST" class=" upper_form ">
+						<input type="text" placeholder="Find a friend" name="name" required="true" />
+						<input type="hidden" name="id" value="<%=user.id%>">
+						<input type="submit"  style="background-color: #90caf9;" name="submit" value="Find user">
+					</form>
+
+					<form action="/new_post" method="POST" class="upper_form" >
+						<input type="text" placeholder="Create a new post" name="content" />
+						<input type="hidden" name="user_id" value="<%=user.id%>">
+						<input type="hidden" name="giver" value="<%=user.username%>">
+						<input type="submit"  style="background-color: #90caf9;"  name="submit" value="post it">
+					</form>
+				</div>
+			</div>
+			<br>
+		</div>
+
+		<%
+			friend_list = nil
+			if user.friends
+				friend_list = user.friends.split("(@)")
+			end
+		%>
+		
+		<% post_list.each do |post| %>
+			<% if post.soft_del 
+				next
+			end %>
+			<%if friend_list && (friend_list.include?post.user_id.to_s) %>
+			<div class="single_post">
+				<h4 style="font-family: 'Lobster', cursive; text-align: center;"><%= post.content %></h4>
+				<hr style="color: white;" >
+				<div style="text-align: center;">
+					<h4 class="post_contents">likes : <%=post.likes%></h4>
+					<h4 class="post_contents" style="background-color: white;">~</h4>
+					<h4 class="post_contents">given by : <%=post.giver%></h4>
+					<h4 class="post_contents" style="background-color: white;">~</h4>
+					<h4 class="post_contents">Added on : <%=post.time%></h4>
+				</div>
+				<br>
+				
+				<% if post.show_comment %>
+					<div class="comments_from_one_post">
+						<h4>Comments</h4>
+						<hr>
+						<%comment_list.each do |comment| %>
+							<% if comment.post_id==post.id %>
+								<div class="comment_single_template" >
+									<h4 style="margin-left: 2%; text-align: left;" class="comment_content"><%= comment.content%></h4>
+									<div class="comments_minor_details">
+										<p>BY : <%= comment.giver%>&nbsp;&nbsp;ON : <%=comment.time%></p>
+										<%if comment.user_id==user.id %>
+										<div class="comment_delete_button">
+											<form action="/delete_comment" method="POST">
+												<input type="hidden" name="id" value="<%=comment.id%>">
+												<input type="submit"  name="submit" value="delete">
+											</form>
+										</div>
+										<%end%>
+									</div>
+								</div>
+								<hr style="color: black;">
+							<% end %>
+						<%end%>
+					</div>
+				<% end %>
+
+				<div style="text-align: center;">
+						<form action="/post_like" class="post_form" method="POST">
+							<input type="hidden" name="id" value="<%=post.id%>">
+							<input type="submit"  style="background-color: #90caf9;"  name="submit" value="like">	
+						</form>
+						
+						<form action="/comment" class="post_form" method="POST">
+							<input type="hidden" name="id" value="<%=post.id%>">
+							<input type="submit"  style="background-color: #90caf9;" name="submit" value="comment">	
+						</form>
+						<form action="/show_comment" class="post_form" method="POST">
+							<input type="hidden" name="id" value="<%=post.id%>">
+							<input type="submit"  style="background-color: #90caf9;" name="submit" value="show comments">	
+						</form>
+					<% if post.user_id==user.id %>	
+						<form action="/edit_post" class="post_form" method="POST">
+							<input type="hidden" name="id" value="<%=post.id%>">
+							<input type="submit" style="background-color: #90caf9;" name="submit" value="edit">	
+						</form>
+						<form action="/delete_post" class="post_form" method="POST">
+							<input type="hidden" name="id" value="<%=post.id%>">
+							<input type="submit" style="background-color: #90caf9;" name="submit" value="delete">	
+						</form>
+					<%end%>
+				</div>
+				<br>
+				<%end%>
+			</div>
+		<%end%>
+	</div>
+</body>
+
+<style>
+	.single_post
+	{
+		margin-left: 5%;
+		margin-right: 5%;
+		padding : 10px;
+		border: 2px black solid;
+		border-radius: 10px;
+		background-color: #2196f3;
+	}
+	body
+	{
+		background-color: #0d47a1;	
+	}
+	.upper_form
+	{
+		display: inline;	 
+	}
+	.post_form
+	{
+		display: inline;	 
+	}
+	.post_contents
+	{
+		display: inline;
+		border: 0.5px none solid;
+		border-radius: 3px;
+		background-color: #1976d2;	
+	}
+	.upper_options
+	{
+		border: 2px white solid;
+		border-radius: 20px;
+		display: inline-block;
+		padding:10px;
+	}
+	.comments_from_one_post
+	{
+		margin-left: 3%;
+		margin-right: 3%;
+		padding : 8px;
+		border: 1px white solid;
+		border-radius: 10px;
+		background-color: #90caf9;	
+	}
+	.comments_minor_details
+	{
+		font-size: 13px;
+		margin-left: 2%;
+		text-align: left;	
+	}
+	.comment_delete_button
+	{
+		text-align: center;	
+	}
+	.comment_content
+	{
+		font-family: 'Yanone Kaffeesatz', sans-serif;
+	}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

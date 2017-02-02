@@ -1,0 +1,76 @@
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet"> 
+<body style="background-color: #0d47a1;">
+	<h1 style="text-align: center;color:white;font-family: 'Roboto Mono', monospace;text-decoration: underline;">
+		RESULTS FOR YOUR SEARCH
+	</h1>
+	<hr>
+	<br>
+	<% 
+		text_on_button="add friend" 
+		contain = false
+	%>
+	<div class="showing_div">
+		<% if found %>
+			<h3 style="text-align: center;">FOUND THE USER</h3><br>
+			<h4 style="text-align: center; color:#ff1744;">name : <%=friend.username%></h4>
+			<% 
+				if user.friends != nil
+					friend_list = user.friends.split("(@)")
+					text_on_button = "add friend "
+					if friend_list.include?(friend.id.to_s)
+						puts "magic happend"
+						contain = true
+						text_on_button = "remove friend"
+					end
+				end
+			%>
+			<form action="/add_friend" method="POST" style="text-align: center;" >
+				<input type="hidden" name="contain" value="<%=contain%>">
+				<input type="hidden" name="friend_id" value="<%=friend.id%>">
+				<input type="submit" name="submit" value="<%=text_on_button%>">
+			</form>
+
+		<% else %>
+			<h3  style="text-align: center;">there is no user with username you mentioned</h3>
+		<% end %>
+		<br>
+	</div>
+
+	<div style="text-align: center;">
+		<a href="/wall"  >BACK TO WALL</a>	
+	</div>
+
+</body>
+
+
+<style>
+	.showing_div
+	{
+		margin:5%;
+		border:2px none solid ;
+		background-color:#2196f3 ;
+		border-radius: 20px;
+	}
+	a
+	{
+		text-decoration: none;
+		text-align: center;
+		color: white;
+		font-size: 40px;
+	}
+	input
+	{
+		background-color: #90caf9;
+	}
+</style>
+
+
+
+
+
+
+
+
+
+
+

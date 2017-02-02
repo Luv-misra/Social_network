@@ -1,0 +1,77 @@
+
+<body>
+<div class ="content">
+	<% if user_list==nil || user_list.size <= 0 %>
+		<h1>you do not have any friends</h1>
+	<% else %>
+		<div class="friend_list">
+			<h4>friends are :</h4>
+			<% user_list.each do |friend| %>
+				
+				<p><%= friend %></p>
+				<hr>
+			<% end %>
+		</div>
+	<% end %>
+</div>
+<br>
+<div class="back">
+	<a href="/wall">back to wall</a>
+</div>
+</body>
+
+<style>
+	
+	body
+	{
+		background-color: #0d47a1;	
+	}
+	.friend_list
+	{
+		display: inline-block;
+		border : 2px white solid;
+		padding: 5% ;
+		text-align: center;
+		background-color: #1976d2;
+		color: white ;		
+	}
+	a
+	{
+		text-align: center;
+		text-decoration: none;
+		color: white ;
+	}
+	.back
+	{
+		margin-left: 5%;
+		margin-top: 3%;
+	}
+	.content
+	{
+		text-align: center;
+	}
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

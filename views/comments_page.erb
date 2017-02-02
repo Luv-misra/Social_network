@@ -1,0 +1,86 @@
+
+<body>
+<p style="color: white;text-align: center;" >Post : <%=post.content%> </p>
+
+<% if comment_list !=nil %>
+	<p style="color: white;text-align: left;margin-left: 5%;">earlier comments</p>
+	<% comment_list.each do |comment|  %>
+
+	<div class="comment_single">
+		<p style="text-align: center;"><%= comment.content %></p><hr>
+		<div style="text-align: center;">
+			<p class="comment_content"><%= comment.giver %>&nbsp;&nbsp;&nbsp;</p>
+			<p class="comment_content"><%= comment.time %></p>
+		</div>
+	</div>
+
+	<% end %>
+<% end %>
+
+<div style="text-align: center; margin-top: 2%;">
+	<form action="/add_comment" method="POST" >
+		<input type="text" placeholder="Create a new comment" name="content" required="true" />
+		<input type="hidden" name="comment_id" value="<%=comment_id%>"/>
+		<input type="submit" name="submit" value="create comment" />
+	</form>
+	<br>
+	<a href="/wall" style="text-decoration:none;text-align: center;">back to wall</a>
+</div>
+
+</body>
+
+<style>
+	.comment_single
+	{
+		border: 1px #eeeeee solid;
+		border-radius: 3px;
+		background-color: #1976d2;
+		margin-left: 5%;
+		margin-right: 5%;
+		padding: 10px;
+	}
+	body
+	{
+		background-color: #0d47a1;	
+	}
+	.comment_content
+	{
+		color: black;
+		display: inline;
+	}
+	a
+	{
+		color: white;
+	}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
